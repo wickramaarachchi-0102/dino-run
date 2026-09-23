@@ -71,11 +71,6 @@ jobs:
             -e "s|__RUN_URL__|${RUN_URL}|g" \
             public/index.html
 
-      - name: Pull Vercel project settings
-        run: |
-          VERCEL_ENV=$([ "$IS_PRODUCTION" = "true" ] && echo production || echo preview)
-          vercel pull --yes --environment="$VERCEL_ENV" --token="${{ secrets.VERCEL_TOKEN }}"
-
       - name: Build
         run: |
           PROD_FLAG=$([ "$IS_PRODUCTION" = "true" ] && echo "--prod" || echo "")
