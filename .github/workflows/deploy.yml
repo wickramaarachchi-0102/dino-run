@@ -12,8 +12,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
   IS_PRODUCTION: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
 
 jobs:
@@ -67,6 +65,10 @@ jobs:
             -e "s|__REPO__|${REPO}|g" \
             -e "s|__RUN_URL__|${RUN_URL}|g" \
             public/index.html
+
+      - name: Pull Vercel project settings
+        run: |
+          vercel pull --yes --environment=production --project-id=prj_RgLjYSEor51xmbql9suAVz88uGTu --org-id=team_64NyWzUzaGANnTyTZsBrUlmi --token="${{ secrets.VERCEL_TOKEN }}"
 
       - name: Build
         run: |
