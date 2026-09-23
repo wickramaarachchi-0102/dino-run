@@ -7,7 +7,6 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# If you push twice quickly, cancel the older run for the same branch
 concurrency:
   group: deploy-${{ github.ref }}
   cancel-in-progress: true
@@ -18,7 +17,6 @@ env:
   IS_PRODUCTION: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
 
 jobs:
-  # ── Stage 1: Continuous Integration ──────────────────────────────
   validate:
     name: ✅ Validate
     runs-on: ubuntu-latest
@@ -37,7 +35,6 @@ jobs:
       - name: Check JavaScript syntax
         run: node --check public/game.js
 
-  # ── Stage 2: Continuous Deployment ───────────────────────────────
   deploy:
     name: 🚀 Deploy (${{ github.event_name == 'pull_request' && 'preview' || 'production' }})
     needs: validate
@@ -70,6 +67,10 @@ jobs:
             -e "s|__REPO__|${REPO}|g" \
             -e "s|__RUN_URL__|${RUN_URL}|g" \
             public/index.html
+
+      - name: Pull Vercel Project Settings
+        run: |
+          vercel pull --yes --environment=production --token="${{ secrets.VERCEL_TOKEN }}"
 
       - name: Build
         run: |
