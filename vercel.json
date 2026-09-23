@@ -1,5 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "orgId": "team_64NyWzUzaGANnTyTZsBrUlmi",
+  "projectId": "prj_RgLjYSEor51xmbql9suAVz88uGTu",
   "framework": null,
   "buildCommand": "",
   "outputDirectory": "public",
