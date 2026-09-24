@@ -66,16 +66,14 @@ jobs:
             -e "s|__RUN_URL__|${RUN_URL}|g" \
             public/index.html
 
-      - name: Build
-        run: |
-          PROD_FLAG=$([ "$IS_PRODUCTION" = "true" ] && echo "--prod" || echo "")
-          vercel build $PROD_FLAG --token="${{ secrets.VERCEL_TOKEN }}"
-
       - name: Deploy to Vercel
         id: deploy
+        env:
+          VERCEL_ORG_ID: team_64NyWzUzaGANnTyTZsBrUlmi
+          VERCEL_PROJECT_ID: prj_RgLjYSEor51xmbql9suAVz88uGTu
         run: |
           PROD_FLAG=$([ "$IS_PRODUCTION" = "true" ] && echo "--prod" || echo "")
-          URL=$(vercel deploy --prebuilt $PROD_FLAG --token="${{ secrets.VERCEL_TOKEN }}")
+          URL=$(vercel deploy $PROD_FLAG --token="${{ secrets.VERCEL_TOKEN }}" --yes)
           echo "url=$URL" >> "$GITHUB_OUTPUT"
 
       - name: Summary
